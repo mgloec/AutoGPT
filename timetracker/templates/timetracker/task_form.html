@@ -1,0 +1,45 @@
+{% extends 'timetracker/base.html' %}
+{% load widget_tweaks %}
+
+{% block title %}{{ action }} Task - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <h2>{{ action }} Task</h2>
+        {% if team %}
+        <p class="text-muted mb-4">Creating task for team: {{ team.name }}</p>
+        {% endif %}
+        
+        <form method="post" id="taskForm">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="mb-3">
+                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                {% if field.errors %}
+                    {% render_field field class="form-control is-invalid" %}
+                    {% for error in field.errors %}
+                        <div class="invalid-feedback">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    {% render_field field class="form-control" %}
+                {% endif %}
+                {% if field.help_text %}
+                    <div class="form-text">{{ field.help_text }}</div>
+                {% endif %}
+            </div>
+            {% endfor %}
+
+           
+
+            <button type="submit" class="btn btn-primary">{{ action }} Task</button>
+            <a href="{% url 'timetracker:task_list' %}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{% endblock %}

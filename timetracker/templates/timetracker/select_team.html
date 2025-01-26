@@ -1,0 +1,43 @@
+{% extends 'timetracker/base.html' %}
+
+{% block title %}Select Team - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <h2>Select Team</h2>
+        <p class="text-muted">Choose a team to create a task for:</p>
+        
+        <div class="list-group">
+            {% for team in teams %}
+            <div class="list-group-item">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="mb-1">{{ team.name }}</h5>
+                        <small class="text-muted">Manager: {{ team.manager.username }}</small>
+                    </div>
+                    <div class="btn-group">
+                        {% if user == team.manager %}
+                        <a href="{% url 'timetracker:category_manage' team.id %}" class="btn btn-info">
+                            <i class="fas fa-tags"></i> Manage Categories
+                        </a>
+                        {% endif %}
+                        <a href="{% url 'timetracker:task_create' team.id %}" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Create Task
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="alert alert-warning">
+                You are not a member of any team. Please contact your team manager to be added to a team.
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="mt-3">
+            <a href="{% url 'timetracker:task_list' %}" class="btn btn-secondary">Back to Tasks</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
